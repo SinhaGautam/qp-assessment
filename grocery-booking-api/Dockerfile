@@ -9,26 +9,29 @@ COPY tsconfig*.json ./
 RUN npm ci
 
 
-COPY . .
-
-
-
-
+COPY src/ ./src/
 RUN npm run build
+
+
 FROM node:18-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/dist ./src
 
-
+#ENV Variables 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV DB_HOST=postgres
+ENV DB_PORT=5432
+ENV DB_USERNAME=postgres
+ENV DB_PASSWORD=postgres
+ENV DB_NAME=postgres
+ENV DB_SCHEMA=public
+ENV JWT_SECRET=default_secret
+ENV JWT_EXPIRES_IN=3000
 
 EXPOSE ${PORT}
 
-
-
-CMD ["node", "./dist/src/startServer.js"]
+CMD ["node", "src/startServer.js"]

@@ -1,5 +1,9 @@
 import { DataSource } from 'typeorm';
 import { logger } from '../utils/logger';
+import { Users } from '../entities/User.entity';
+import { Groceries } from '../entities/grocery.entity';
+import { Orders } from '../entities/order.entity';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,7 +17,8 @@ export const AppDataSource = new DataSource({
   password: E.DB_PASSWORD,
   database: E.DB_NAME,
   schema: E.DB_SCHEMA,
-  entities: ['src/entities/*.ts'],
+  entities: [Users, Groceries, Orders],
+  migrations: [], // Add your migration files here if needed
   synchronize: false, // Set to false in production, use migrations instead
   logging: false,
 });
